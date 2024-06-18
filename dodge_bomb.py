@@ -23,7 +23,6 @@ def kk_img0(kk_img):
         (-5, +5):pg.transform.rotozoom(kk_img, -45, 1.0), # 左下
         (-5, 0):pg.transform.rotozoom(kk_img, 0, 1.0), # 左
         (-5, -5):pg.transform.rotozoom(kk_img, 45, 1.0), # 左上
-
         }
     return KAITEN
 
@@ -48,7 +47,6 @@ def main():
     screen = pg.display.set_mode((800, 600))
     bg_img = pg.image.load("fig/pg_bg.jpg")    
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
-    
     kk_rct = kk_img.get_rect()
     kk_rct.center = 400, 300
     enn = pg.Surface((20, 20)) # 1辺が20の空のSurfaceを作る
@@ -68,20 +66,17 @@ def main():
         if kk_rct.colliderect(bb_rct):
             return
         screen.blit(bg_img, [0, 0]) 
-
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
         for k, v in DELTA.items():
             if key_lst[k]:
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
-                screen.blit(kk_img, kk_rct)
         kk_rct.move_ip(sum_mv)
-           
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
-
+        kk_img = kk_imgs[tuple(sum_mv)]
         bb_rct.move_ip(vx, vy)
         yoko, tate = check_bound(bb_rct)
         if not yoko:
