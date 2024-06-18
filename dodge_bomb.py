@@ -11,13 +11,21 @@ DELTA = {
     pg.K_LEFT: (-5, 0),
     pg.K_RIGHT: (+5, 0)
 }
-# KAITEN = {
-#     (0, -5):pg.transform.rotozoom(kk_img, True, 1.0),
-#     pg.K_DOWN: (0, +5),
-#     pg.K_LEFT: (-5, 0),
-#     pg.K_RIGHT: (+5, 0)
-# }
+
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+def kk_img0(kk_img):
+    KAITEN = {
+        (0, -5):pg.transform.rotozoom(kk_img, 90, 1.0), # 上
+        (+5, -5):pg.transform.rotozoom(kk_img, 45, 1.0), # 右上
+        (+5, 0):pg.transform.rotozoom(kk_img, 180, 1.0), # 反転
+        (+5, +5):pg.transform.rotozoom(kk_img, -45, 1.0), # 右下
+        (0, +5):pg.transform.rotozoom(kk_img, -90, 1.0), # 下
+        (-5, +5):pg.transform.rotozoom(kk_img, -45, 1.0), # 左下
+        (-5, 0):pg.transform.rotozoom(kk_img, 0, 1.0), # 左
+        (-5, -5):pg.transform.rotozoom(kk_img, 45, 1.0), # 左上
+
+        }
+    return KAITEN
 
 
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
@@ -32,6 +40,7 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     if rct.top < 0 or 600 < rct.bottom:
         tate = False
     return yoko, tate 
+    
 
 
 def main():
@@ -42,23 +51,14 @@ def main():
     
     kk_rct = kk_img.get_rect()
     kk_rct.center = 400, 300
-    kk_img_2=pg.transform.rotozoom(kk_img, True, 1.0),
-    KAITEN = {
-    (0, -5):kk_img_2,
-    (+5, -5):kk_img_2,
-    (+5, 0):kk_img_2,
-    (+5, +5):kk_img_2,
-    (0, +5):kk_img_2,
-    (-5, +5):kk_img_2,
-    (-5, 0):kk_img_2,
-    (-5, -5):kk_img_2,
-    }
     enn = pg.Surface((20, 20)) # 1辺が20の空のSurfaceを作る
     pg.draw.circle(enn, (255, 0, 0), (10, 10), 10)
     enn.set_colorkey((0, 0, 0))
     bb_rct = enn.get_rect()
     bb_rct.center = random.randint(0, 800), random.randint(0, 600)
     vx, vy = +5, +5  # 爆弾の速度
+    kk_imgs = kk_img0()
+    kk_img = kk_imgs[tuple(sum_mv)]
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -75,12 +75,9 @@ def main():
             if key_lst[k]:
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
-                kk_img_2=pg.transform.rotozoom(kk_img, True, 1.0),
-        
-        # for i, j in KAITEN.items():
-        #     if key_lst[i]:
-                
+                screen.blit(kk_img, kk_rct)
         kk_rct.move_ip(sum_mv)
+           
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
@@ -91,7 +88,6 @@ def main():
             vx *= -1
         if not tate:
             vy *= -1
-
         screen.blit(enn, bb_rct)
         pg.display.update()
         tmr += 1
