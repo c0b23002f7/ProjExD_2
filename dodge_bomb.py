@@ -12,7 +12,11 @@ DELTA = {
     pg.K_RIGHT: (+5, 0)
 }
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-def kk_img0(kk_img):
+def kk_img0(kk_img: pg.Rect) -> tuple[bool]:
+    """
+    引数：こうかとんimg
+    戻り値：辞書の値
+    """
     KAITEN = {
         (0, -5):pg.transform.rotozoom(kk_img, 90, 1.0), # 上
         (+5, -5):pg.transform.rotozoom(kk_img, 45, 1.0), # 右上
