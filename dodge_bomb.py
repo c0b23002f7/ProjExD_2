@@ -11,7 +11,6 @@ DELTA = {
     pg.K_LEFT: (-5, 0),
     pg.K_RIGHT: (+5, 0)
 }
-
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 def kk_img0(kk_img):
     KAITEN = {
@@ -87,6 +86,7 @@ def main():
         pg.display.update()
         tmr += 1
         clock.tick(50)
+
 
 
 if __name__ == "__main__":
