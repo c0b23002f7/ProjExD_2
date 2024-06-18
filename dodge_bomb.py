@@ -22,25 +22,25 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     画面内ならTrue、画面外ならFalse
     """
     yoko, tate = True, True
-    if rct.left < 0 or 800 < rct.right:
+    if rct.left < 0 or WIDTH < rct.right:
         yoko = False
-    if rct.top < 0 or 600 < rct.bottom:
+    if rct.top < 0 or HEIGHT < rct.bottom:
         tate = False
     return yoko, tate 
 
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
-    screen = pg.display.set_mode((800, 600))
+    screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("fig/pg_bg.jpg")    
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
     kk_rct = kk_img.get_rect()
-    kk_rct.center = 300, 200
+    kk_rct.center = 900, 400
     enn = pg.Surface((20, 20)) # 1辺が20の空のSurfaceを作る
     pg.draw.circle(enn, (255, 0, 0), (10, 10), 10)
     enn.set_colorkey((0, 0, 0))
     bb_rct = enn.get_rect()
-    bb_rct.center = random.randint(0, 800), random.randint(0, 600)
+    bb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     vx, vy = +5, +5  # 爆弾の速度
     clock = pg.time.Clock()
     tmr = 0
