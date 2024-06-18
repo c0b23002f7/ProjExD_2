@@ -11,7 +11,12 @@ DELTA = {
     pg.K_LEFT: (-5, 0),
     pg.K_RIGHT: (+5, 0)
 }
-
+# KAITEN = {
+#     (0, -5):pg.transform.rotozoom(kk_img, True, 1.0),
+#     pg.K_DOWN: (0, +5),
+#     pg.K_LEFT: (-5, 0),
+#     pg.K_RIGHT: (+5, 0)
+# }
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -22,25 +27,37 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     画面内ならTrue、画面外ならFalse
     """
     yoko, tate = True, True
-    if rct.left < 0 or WIDTH < rct.right:
+    if rct.left < 0 or 800 < rct.right:
         yoko = False
-    if rct.top < 0 or HEIGHT < rct.bottom:
+    if rct.top < 0 or 600 < rct.bottom:
         tate = False
     return yoko, tate 
 
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
-    screen = pg.display.set_mode((WIDTH, HEIGHT))
+    screen = pg.display.set_mode((800, 600))
     bg_img = pg.image.load("fig/pg_bg.jpg")    
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
+    
     kk_rct = kk_img.get_rect()
-    kk_rct.center = 900, 400
+    kk_rct.center = 400, 300
+    kk_img_2=pg.transform.rotozoom(kk_img, True, 1.0),
+    KAITEN = {
+    (0, -5):kk_img_2,
+    (+5, -5):kk_img_2,
+    (+5, 0):kk_img_2,
+    (+5, +5):kk_img_2,
+    (0, +5):kk_img_2,
+    (-5, +5):kk_img_2,
+    (-5, 0):kk_img_2,
+    (-5, -5):kk_img_2,
+    }
     enn = pg.Surface((20, 20)) # 1辺が20の空のSurfaceを作る
     pg.draw.circle(enn, (255, 0, 0), (10, 10), 10)
     enn.set_colorkey((0, 0, 0))
     bb_rct = enn.get_rect()
-    bb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
+    bb_rct.center = random.randint(0, 800), random.randint(0, 600)
     vx, vy = +5, +5  # 爆弾の速度
     clock = pg.time.Clock()
     tmr = 0
@@ -58,6 +75,11 @@ def main():
             if key_lst[k]:
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
+                kk_img_2=pg.transform.rotozoom(kk_img, True, 1.0),
+        
+        # for i, j in KAITEN.items():
+        #     if key_lst[i]:
+                
         kk_rct.move_ip(sum_mv)
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
